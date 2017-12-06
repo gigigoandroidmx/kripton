@@ -1,6 +1,6 @@
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![Logo](assets/klogo.png)
+![Logo](klogo.png)
 
 # Kripton
 Library for basic Android applications that implements the Model View Presenter pattern
