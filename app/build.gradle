@@ -1,73 +1,141 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    }
-}
-
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-
-def STRING = "String";
-
-def APP_HOST = "APP_HOST";
-def APP_FOLDER = "APP_FOLDER";
-def APP_REST_URI = "APP_REST_URI";
-def PATH_CHANNEL = "PATH_CHANNEL";
-
-def API_KEY = "API_KEY";
-def CHANNEL_ID = "CHANNEL_ID";
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
-        applicationId "com.gigigo.kripton"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-
-        buildConfigField STRING, APP_HOST, '"https://www.googleapis.com/"'
-        buildConfigField STRING, APP_FOLDER, '"youtube/"'
-        buildConfigField STRING, APP_REST_URI, APP_HOST.concat(' + ').concat(APP_FOLDER).concat(' + "v3/"')
-        buildConfigField STRING, PATH_CHANNEL, APP_REST_URI.concat(' + "search"')
-
-        buildConfigField STRING, API_KEY, '"AIzaSyADicFoj0c_WP0E3XVpxeeiG7Db29Vrt-g"' // {YOUR_API_KEY}
-        buildConfigField STRING, CHANNEL_ID, '"UCVHFbqXqoYvEWM1Ddxl0QDg"' // Android Developers
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        release {
+            def Properties props = new Properties()
+            def propFile = new File('./signing.properties')
+            if (propFile.canRead()) {
+                props.load(new FileInputStream(propFile))
+
+                if (props != null &&
+                        props.containsKey('STORE_FILE') &&
+                        props.containsKey('STORE_PASSWORD') &&
+                        props.containsKey('KEY_ALIAS') &&
+                        props.containsKey('KEY_PASSWORD')) {
+                    android.signingConfigs.release.storeFile = file(props.getProperty('STORE_FILE'))
+                    android.signingConfigs.release.storePassword = props.getProperty('STORE_PASSWORD')
+                    android.signingConfigs.release.keyAlias = props.getProperty('KEY_ALIAS')
+                    android.signingConfigs.release.keyPassword = props.getProperty('KEY_PASSWORD')
+                } else {
+                    println 'signing.properties found but some entries are missing'
+                    android.buildTypes.release.signingConfig = null
+                }
+            } else {
+                println 'signing.properties not found'
+                android.buildTypes.release.signingConfig = null
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        production {
+            debuggable true
+            signingConfig null //signingConfigs.release
+        }
+        release {
+            debuggable true
+            signingConfig null //signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    productFlavors.whenObjectAdded { flavor ->
+        def flavorData = rootProject.ext[flavor.name]
+        flavor.versionCode flavorData.versionCode
+        flavor.versionName flavorData.versionName
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    productFlavors {
+        kripton_core {
+
+        }
+    }
+
+    project.android.applicationVariants.all { variant ->
+
+        variant.productFlavors.each { flavor ->
+
+            def flavorData = rootProject.ext[flavor.name]
+            def appName = flavorData.appName
+            def applicationId = flavorData.applicationId
+
+            println("**************************************************")
+            println("-------------" + flavor.name + "." + variant.buildType.name + "." + variant.mergedFlavor.versionCode + "-------------")
+
+            if (variant.buildType.name.equals("debug")) {
+                applicationId = flavorData.applicationId + ".debug"
+                appName = "[Q] " + flavorData.appName
+            } else if (variant.buildType.name.equals("production")) {
+                applicationId = flavorData.applicationId + ".production"
+                appName = "[P] " + flavorData.appName
+            } else {
+                variant.mergedFlavor.versionCode = flavorData.versionCodeRelease
+                variant.mergedFlavor.versionName = flavorData.versionNameRelease
+            }
+
+            setVariantApplicationId(variant, applicationId)
+            setVariantResValue(variant, appName, "app_name", STRING.toLowerCase())
+
+            // setVariantBuildConfigField
+            // E.G.
+            // def STRING = "String"
+
+            println("**************************************************")
+        }
+
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def file = output.outputFile;
+                output.outputFile = new File(file.parent, "${output.baseName}-${variant.versionName}-${variant.versionCode}.apk")
+            }
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 
-    compile testingDependencies.junit
+    compile parent.ext.testing.junit
 
-    compile supportDependencies.design
-    compile supportDependencies.appcompat
-    compile supportDependencies.cardview
-    compile supportDependencies.recyclerview
+    compile parent.ext.libraries.design
+    compile parent.ext.libraries.appcompat
+    compile parent.ext.libraries.recyclerview
 
-    compile glide
-
-    compile butterknifeDependencies.butterknife
-    apt butterknifeDependencies.butterknifecompiler
-
-
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
-
-    compile project(path: ':kmvp')
+    compile rootProject.ext.modules.kretrofitmanager
+    compile rootProject.ext.modules.kmvp
+    compile rootProject.ext.modules.kbase
+    compile rootProject.ext.modules.kbranding
 }
-
