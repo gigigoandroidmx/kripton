@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 /**
- * Defines the Activity with base functionality, must be inherited from {@link AppCompatActivity}
+ * Defines the Activity with base functionality, must be inherited from AppCompatActivity
  *
  * @author Juan Godínez Vera - 15/05/2017
  * @author Alan Espinosa - 16/05/2017
