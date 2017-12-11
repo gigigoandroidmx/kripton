@@ -1,13 +1,13 @@
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![Logo](assets/klogo.png)
+![Logo](assets/logo.png)
 
 # Kripton
-Library for basic Android applications that implements the Model View Presenter pattern
+Es una librería que permite a los desarrolladores crear aplicaciones robustas para Android implementando el patrón MVP de forma simple.
 
 # License
 ```
-Copyright 2017 Gigigo Android Development Team México
+Copyright 2016 gigigo México
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

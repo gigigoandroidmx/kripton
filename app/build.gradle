@@ -1,0 +1,73 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+def STRING = "String";
+
+def APP_HOST = "APP_HOST";
+def APP_FOLDER = "APP_FOLDER";
+def APP_REST_URI = "APP_REST_URI";
+def PATH_CHANNEL = "PATH_CHANNEL";
+
+def API_KEY = "API_KEY";
+def CHANNEL_ID = "CHANNEL_ID";
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.gigigo.kripton"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField STRING, APP_HOST, '"https://www.googleapis.com/"'
+        buildConfigField STRING, APP_FOLDER, '"youtube/"'
+        buildConfigField STRING, APP_REST_URI, APP_HOST.concat(' + ').concat(APP_FOLDER).concat(' + "v3/"')
+        buildConfigField STRING, PATH_CHANNEL, APP_REST_URI.concat(' + "search"')
+
+        buildConfigField STRING, API_KEY, '"AIzaSyADicFoj0c_WP0E3XVpxeeiG7Db29Vrt-g"' // {YOUR_API_KEY}
+        buildConfigField STRING, CHANNEL_ID, '"UCVHFbqXqoYvEWM1Ddxl0QDg"' // Android Developers
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile testingDependencies.junit
+
+    compile supportDependencies.design
+    compile supportDependencies.appcompat
+    compile supportDependencies.cardview
+    compile supportDependencies.recyclerview
+
+    compile glide
+
+    compile butterknifeDependencies.butterknife
+    apt butterknifeDependencies.butterknifecompiler
+
+
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+
+    compile project(path: ':kmvp')
+}
+
