@@ -1,13 +1,32 @@
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![Logo](assets/klogo.png)
+![Logo](assets/logo.png)
 
 # Kripton
-Library for basic Android applications that implements the Model View Presenter pattern
+Es una librería que permite a los desarrolladores crear aplicaciones robustas para Android implementando el patrón MVP de forma simple.
+
+## Cómo utilizarlo
+__Paso 1.__ Agregar el repositorio JitPack en el archivo build
+```groovy
+   allprojects {
+      repositories {
+         ...
+         maven { url 'https://jitpack.io' }
+      }
+   }
+```
+
+__Paso 2.__ Agregar la dependencia
+```python
+    dependencies {
+        compile 'com.github.gigigoandroidmx:kripton:v1.0'
+    }
+```
 
 # License
 ```
-Copyright 2017 Gigigo Android Development Team México
+Copyright (c) 2017 Gigigo Android Development Team México
+
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
