@@ -16,16 +16,16 @@ __Paso 1.__ Agregar el repositorio JitPack en el archivo build
    }
 ```
 
-__Paso 2.__ Agregar la dependencia
+__Paso 2.__ Agregar las dependencias
 ```python
     dependencies {
-		// mvp
+	// mvp
         compile 'com.github.gigigoandroidmx.kripton:kmvp:v2.0.1'
-		// extensiones retrofit
+	// extensiones retrofit
         compile 'com.github.gigigoandroidmx.kripton:kretrofitmanager:v2.0.1'
-		// view base
+	// view base
         compile 'com.github.gigigoandroidmx.kripton:kbase:v2.0.1'
-		// branding
+	// branding
         compile 'com.github.gigigoandroidmx.kripton:kbranding:v2.0.1'
     }
 ```
