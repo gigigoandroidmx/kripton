@@ -5,6 +5,24 @@
 # Kripton
 Es una librería que permite a los desarrolladores crear aplicaciones robustas para Android implementando el patrón MVP de forma simple.
 
+## Cómo utilizarlo
+__Paso 1.__ Agregar el repositorio JitPack en el archivo build
+```groovy
+   allprojects {
+      repositories {
+         ...
+         maven { url 'https://jitpack.io' }
+      }
+   }
+```
+
+__Paso 2.__ Agregar la dependencia
+```python
+    dependencies {
+        compile 'com.github.gigigoandroidmx:kripton:v1.0'
+    }
+```
+
 # License
 ```
 Copyright 2016 gigigo México
