@@ -30,7 +30,10 @@ __Paso 2.__ Agregar las dependencias
     }
 ```
 
-# License
+## Documentación
+[https://gigigoandroidmx.gitbooks.io/kripton/content/](https://gigigoandroidmx.gitbooks.io/kripton/content/)
+
+## License
 ```
 Copyright (c) 2017 Gigigo Android Development Team México
 
